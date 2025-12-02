@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export const getDogs = async (req, res) => {
   try {
-    const dogs = await prisma.dog.findMany();
+    const dogs = await prisma.dogs.findMany();
     res.json(dogs);
   } catch (err) {
     console.error(err);
@@ -15,7 +15,7 @@ export const getDogs = async (req, res) => {
 export const createDog = async (req, res) => {
   try {
     const { name, breed, age } = req.body;
-    const dog = await prisma.dog.create({ data: { name, breed, age: Number(age) } });
+    const dog = await prisma.dogs.create({ data: { name, breed, age: Number(age) } });
     res.status(201).json(dog);
   } catch (err) {
     console.error(err);
@@ -27,9 +27,9 @@ export const updateDog = async (req, res) => {
   try {
     const id = Number(req.params.id);
     const { name, breed, age } = req.body;
-    const existing = await prisma.dog.findUnique({ where: { id } });
+    const existing = await prisma.dogs.findUnique({ where: { id } });
     if (!existing) return res.status(404).json({ error: "Dog not found" });
-    const updated = await prisma.dog.update({ where: { id }, data: { name, breed, age: Number(age) } });
+    const updated = await prisma.dogs.update({ where: { id }, data: { name, breed, age: Number(age) } });
     res.json(updated);
   } catch (err) {
     console.error(err);
@@ -40,9 +40,9 @@ export const updateDog = async (req, res) => {
 export const deleteDog = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const existing = await prisma.dog.findUnique({ where: { id } });
+    const existing = await prisma.dogs.findUnique({ where: { id } });
     if (!existing) return res.status(404).json({ error: "Dog not found" });
-    const removed = await prisma.dog.delete({ where: { id } });
+    const removed = await prisma.dogs.delete({ where: { id } });
     res.json(removed);
   } catch (err) {
     console.error(err);
