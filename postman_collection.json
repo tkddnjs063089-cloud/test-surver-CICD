@@ -1,0 +1,97 @@
+{
+  "info": {
+    "name": "Dogs API",
+    "_postman_id": "dogs-api-collection",
+    "description": "Postman collection for Dogs API (in-memory)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET Root",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": ["/"]
+        },
+        "description": "루트 메시지 반환"
+      }
+    },
+    {
+      "name": "GET Dogs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/dogs",
+          "host": ["{{baseUrl}}"],
+          "path": ["dogs"]
+        },
+        "description": "강아지 리스트 조회"
+      }
+    },
+    {
+      "name": "POST Create Dog",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"뭉치\",\n  \"breed\": \"시바\",\n  \"age\": 3\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/dogs",
+          "host": ["{{baseUrl}}"],
+          "path": ["dogs"]
+        },
+        "description": "새 강아지 생성 (name, breed, age 필수)"
+      }
+    },
+    {
+      "name": "PUT Update Dog",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"뭉치 수정\",\n  \"breed\": \"시바\",\n  \"age\": 4\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/dogs/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["dogs", "1"]
+        },
+        "description": "강아지 수정: URL의 id를 실제 id로 바꿔 사용하세요"
+      }
+    },
+    {
+      "name": "DELETE Dog",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/dogs/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["dogs", "1"]
+        },
+        "description": "강아지 삭제: URL의 id를 실제 id로 바꿔 사용하세요"
+      }
+    }
+  ]
+}
