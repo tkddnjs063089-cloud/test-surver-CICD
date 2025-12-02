@@ -7,6 +7,7 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.json({ message: "안녕하세요 개같은나라입니다." });
