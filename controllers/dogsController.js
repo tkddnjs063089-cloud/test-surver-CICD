@@ -1,30 +1,51 @@
-let dogs = [];
-let nextId = 1;
+import { PrismaClient } from "@prisma/client";
 
-export const getDogs = (req, res) => {
-  res.json(dogs);
+const prisma = new PrismaClient();
+
+export const getDogs = async (req, res) => {
+  try {
+    const dogs = await prisma.dog.findMany();
+    res.json(dogs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch dogs" });
+  }
 };
 
-export const createDog = (req, res) => {
-  const { name, breed, age } = req.body;
-  const dog = { id: nextId++, name, breed, age };
-  dogs.push(dog);
-  res.status(201).json(dog);
+export const createDog = async (req, res) => {
+  try {
+    const { name, breed, age } = req.body;
+    const dog = await prisma.dog.create({ data: { name, breed, age: Number(age) } });
+    res.status(201).json(dog);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create dog" });
+  }
 };
 
-export const updateDog = (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  const { name, breed, age } = req.body;
-  const idx = dogs.findIndex((d) => d.id === id);
-  if (idx === -1) return res.status(404).json({ error: "Dog not found" });
-  dogs[idx] = { id, name, breed, age };
-  res.json(dogs[idx]);
+export const updateDog = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { name, breed, age } = req.body;
+    const existing = await prisma.dog.findUnique({ where: { id } });
+    if (!existing) return res.status(404).json({ error: "Dog not found" });
+    const updated = await prisma.dog.update({ where: { id }, data: { name, breed, age: Number(age) } });
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update dog" });
+  }
 };
 
-export const deleteDog = (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  const idx = dogs.findIndex((d) => d.id === id);
-  if (idx === -1) return res.status(404).json({ error: "Dog not found" });
-  const removed = dogs.splice(idx, 1)[0];
-  res.json(removed);
+export const deleteDog = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const existing = await prisma.dog.findUnique({ where: { id } });
+    if (!existing) return res.status(404).json({ error: "Dog not found" });
+    const removed = await prisma.dog.delete({ where: { id } });
+    res.json(removed);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete dog" });
+  }
 };
